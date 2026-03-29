@@ -1,0 +1,26 @@
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Groupe</th>
+            <th>Sous-groupe</th>
+            <th>Prix</th>
+            <th>Unité</th>
+            <th>Quantité</th>
+            <th>Montant</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr>
+            <td>{{ article.nom }}</td>
+            <td>{{ article.groupe }}</td>
+            <td>{{ article.sous_groupe }}</td>
+            <td>{{ article.prix }}</td>
+            <td>{{ article.unite }}</td>
+            <td>{{ article.qte }}</td>
+            <td>{{ article.montant }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

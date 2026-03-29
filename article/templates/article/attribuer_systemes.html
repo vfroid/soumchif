@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2>Attribuer des systèmes à l'article : {{ article.nom }}</h2>
+
+    <!-- Filtrage -->
+    <form method="get" class="mb-4">
+        <input type="text" name="nom" value="{{ nom|default:'' }}" class="form-control" placeholder="Filtrer par nom...">
+        <button type="submit" class="btn btn-primary mt-2">Filtrer</button>
+    </form>
+
+    <!-- Formulaire POST -->
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.systemes %}
+            <div class="list-group">
+                {% for checkbox in form.systemes %}
+                    <label class="list-group-item">
+                        {{ checkbox.tag }} {{ checkbox.choice_label }}
+                    </label>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun système trouvé.</p>
+        {% endif %}
+
+        <button type="submit" class="btn btn-success mt-3">Enregistrer</button>
+    </form>
+
+    <div class="mt-3">
+        <a href="{% url 'article_show' article.pk %}" class="btn btn-secondary">Retour à l'article</a>
+    </div>
+
+</div>
+{% endblock %}

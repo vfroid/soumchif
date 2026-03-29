@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Détails de l'article : {{ article.nom }}</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Nom</dt>
+                <dd class="col-sm-9">{{ article.nom }}</dd>
+
+                <dt class="col-sm-3">Groupe</dt>
+                <dd class="col-sm-9">{{ article.groupe }}</dd>
+
+                <dt class="col-sm-3">Sous-groupe</dt>
+                <dd class="col-sm-9">{{ article.sous_groupe }}</dd>
+
+                <dt class="col-sm-3">Prix unitaire</dt>
+                <dd class="col-sm-9">{{ article.prix }} €</dd>
+
+                <dt class="col-sm-3">Unité</dt>
+                <dd class="col-sm-9">{{ article.unite }}</dd>
+
+                <dt class="col-sm-3">Quantité</dt>
+                <dd class="col-sm-9">{{ article.qte }}</dd>
+
+                <dt class="col-sm-3">Montant total</dt>
+                <dd class="col-sm-9">{{ article.montant }} €</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Systèmes associés</h2>
+        </div>
+        <div class="card-body">
+            {% if article.systemes.all %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nom du système</th>
+                                <th>Type</th>
+                                <th>Projet</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for systeme in article.systemes.all %}
+                            <tr>
+                                <td>{{ systeme.nom }}</td>
+                                <td>{{ systeme.type }}</td>
+                                <td>{{ systeme.projet.mandant }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>Aucun système associé à cet article.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'attribuer_systemes' article.pk %}" class="btn btn-primary">
+            Attribuer des systèmes
+        </a>
+    </div>
+</div>
+{% endblock %}

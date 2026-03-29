@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Modifier le projet</h3>
+<form method="POST">
+    {% csrf_token  %}
+    {{ form }}
+    <button type="submit">Modifier</button>
+    </form>
+
+    <a href="{% url 'projet_list' %}">Annuler</a>
+{% endblock %}

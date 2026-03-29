@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block sidebar %}
+<h3>Menu Système</h3>
+<p><a href="{% url 'home' %}">Accueil</a></p>
+<p><a href="{% url 'systeme_list' %}">Liste des systèmes</a></p>
+{% endblock sidebar %}
+
+
+
+{% block content %}
+<h2>Créer un système</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+
+    <h3>Articles à attribuer</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Ajouter</th>
+                <th>Nom</th>
+                <th>Groupe</th>
+                <th>Sous-groupe</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ formset.management_form }}
+            {% for f in formset %}
+            print(f.cleaned_data)
+            <tr>
+                {{ f.id }}  <!-- 🔥 CRUCIAL -->
+                <td>{{ f.ajouter }}</td>
+                <td>{{ f.instance.nom }}</td>
+                <td>{{ f.instance.groupe }}</td>
+                <td>{{ f.instance.sous_groupe }}</td>
+                <td>{{ f.qte }}</td>
+                <td>{{ f.prix }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        print("FORM ERRORS:", form.errors)
+print("FORMSET ERRORS:", formset.errors)
+    print("VALID FORMSET ?", formset.is_valid())
+
+    <button type="submit" class="btn btn-primary">Créer</button>
+    <a href="{% url 'systeme_list' %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock content %}

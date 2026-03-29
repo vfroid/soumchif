@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block sidebar %}
+    <p><a href="{% url 'home' %}">Accueil</a></p>
+    <p><a href="{% url 'systeme_new' %}">Nouveau Systeme</a></p>
+{% endblock sidebar %}
+
+
+{% block content %}
+    <h3>Listes des systèmes</h3>
+
+    <table>
+        <tr><th>Nom</th><th>Abréviation</th><th>Type</th><th>Local (code)</th><th>Local</th><th>Projet</th></tr>
+        {% for s in systemes %}
+        <tr>
+            <td>{{ s.nom }}</td><td>{{ s.abreviation }}</td><td>{{ s.type }}</td>
+            <td>{{ s.local.code }}</td><td>{{ s.local.designation }}</td><td>{{ s.projet.mandant }}</td>
+        <td>
+                <a href="{% url 'systeme_show' s.pk %}" class="btn btn-info">Voir</a>
+                <a href="{% url 'systeme_edit' s.pk %}" class="btn btn-warning">Modifier</a>
+                <a href="{% url 'systeme_delete' s.pk %}" class="btn btn-danger">Supprimer</a>
+        </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block sidebar %}
+    <p><a href="{% url 'home' %}">Accueil</a></p>
+    <p><a href="{% url 'batiment_new' %}">Ajouter un bâtiment</a></p>
+{% endblock sidebar%}
+
+
+{% block content %}
+    <h1>Bâtiments</h1>
+    <table>
+        <tr><th>Nom</th><th>Mandant</th><th>Détails des locaux</th><th>Actions</th></tr>
+        {% for b in batiments %}
+           <tr>
+           <td>{{ b.nom }}, {{ b.rue}} {{ b.cp }} {{ b.ville }}</td>
+               <td>{{ b.projet.mandant }}</td>
+            <td><a href="{% url 'batiment_treeview' b.pk %}" class="button">Structure</a></td>
+               <td>
+                <a href="{% url 'batiment_show' b.pk %}">Show</a> |
+                <a href="{% url 'batiment_edit' b.pk %}">Edit</a> |
+                <a href="{% url 'batiment_delete' b.pk %}">Delete</a>
+            </td>
+       </tr>
+    {% endfor %}
+    </table>
+{% endblock content %}

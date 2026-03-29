@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+
+{% block sidebar %}
+    <h3>Menu Calorifu</h3>
+    <p><a href="{% url 'home' %}">Accueil</a></p>
+    <p><a href="{% url 'calorifu_list' %}">Liste des calorifugeages</a></p>
+{% endblock sidebar %}
+
+{% block content %}
+    <h1>Modifier le calorifugeage de {{ calorifu.article.nom }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button type="submit">Modifier</button>
+            <a href="{% url 'calorifu_list' %}" class="button">Annuler</a>
+        </div>
+    </form>
+{% endblock content %}

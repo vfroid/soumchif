@@ -1,0 +1,52 @@
+{% load static %}
+<html>
+<head>
+    <title>Soumission chiffrée</title>
+    <link rel="stylesheet" href="{% static 'soumchif/app.css' %}">
+</head>
+<body>
+
+   <div class="user-bar">
+    <!-- Photo à gauche -->
+    <div class="user-left">
+        <img class="avatar" src="{% static 'images/tuyaux_pompes.png' %}" alt="Avatar">
+    </div>
+
+    <!-- Titre centré -->
+    <div class="user-center">
+        <h1 class="bar-title">Chiffrage de soumission</h1>
+    </div>
+
+    <!-- Bouton et info à droite -->
+    <div class="user-right">
+        <p class="user-info">Connecté en tant que {{ request.user }}</p>
+        <form action="{% url 'logout' %}" method="post" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Se déconnecter</button>
+        </form>
+    </div>
+</div>
+
+    <!-- Menu horizontal -->
+    <div class="top-menu">
+        <a href="{% url 'home' %}">Accueil</a>
+        <a href="{% url 'projet_list' %}">Projets</a>
+        <a href="{% url 'batiment_list' %}">Bâtiments</a>
+        <a href="{% url 'systeme_list' %}">Systèmes</a>
+        <a href="{% url 'calorifu_list' %}">Calorifugeage</a>
+        <a href="{% url 'article_list' %}">Articles</a>
+
+    </div>
+
+    <!-- Conteneur principal : sidebar à gauche + contenu à droite -->
+    <div class="main-container">
+        <div class="sidebar">
+            {% block sidebar %}{% endblock sidebar %}
+        </div>
+        <div class="main-content">
+            {% block content %}<h1>Soumission chiffrée</h1>{% endblock content %}
+        </div>
+    </div>
+
+</body>
+</html>

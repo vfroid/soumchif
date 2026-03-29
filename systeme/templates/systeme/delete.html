@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Supprimer le système</h1>
+<p>Êtes-vous sûr de vouloir supprimer le système "{{ systeme.nom }} du projet {{ systeme.projet.mandant }}" ?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" >Supprimer</button>
+    <a href="{% url 'systeme_show' systeme.pk %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock content %}

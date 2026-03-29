@@ -1,0 +1,166 @@
+html {
+    font-family: Arial;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table th, table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Barre utilisateur */
+.user-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Conteneur texte + bouton à droite */
+.user-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* pousse tout à l'extrême droite */
+    gap: 10px;        /* espace entre texte et bouton */
+}
+
+/* Texte utilisateur */
+.user-info {
+    margin: 0;
+    font-weight: bold;
+}
+
+/* Bouton de déconnexion */
+.logout-btn {
+    padding: 6px 12px;
+    font-size: 1rem;
+}
+
+/* Flex pour sidebar + contenu */
+.main-container {
+    display: flex;
+}
+
+/* Sidebar links */
+.sidebar a {
+    display: block;
+    padding: 8px;
+    color: #2c3e50; /* texte foncé par défaut */
+    text-decoration: none;
+}
+
+/* Hover avec fond léger */
+.sidebar a:hover {
+    color: #ffffff;            /* texte blanc */
+    background-color: #2c3e50; /* fond foncé pour contraste */
+}
+/* Contenu principal à droite */
+.main-content {
+    flex: 1; /* prend tout l'espace restant */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* Style page content */
+.main {
+    margin-left: 240px; /* Same as the width of the sidebar */
+    padding: 20px;
+}
+
+/* Taille fixe de l'avatar */
+.avatar {
+    width: 6cm;
+    height: 2cm;
+    object-fit: cover; /* garde le ratio et coupe si nécessaire */
+    
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.post img {
+    width: 80%;
+    border-radius: 5px;
+}
+
+/* User bar : photo à gauche, texte + bouton à droite */
+.user-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* espace entre photo et le reste */
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Assure que le texte et l'image restent alignés */
+.user-info {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.top-menu {
+    background-color: #2c3e50; /* bleu foncé moderne */
+    overflow: hidden;
+    display: flex;
+    padding: 0 10px;
+}
+
+/* liens */
+.top-menu a {
+    color: #ecf0f1; /* blanc cassé */
+    padding: 14px 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* hover */
+.top-menu a:hover {
+    background-color: #34495e;
+    color: #ffffff;
+}
+
+/* lien actif */
+.top-menu a.active {
+    border-bottom: 3px solid #3498db;
+}
+
+/* alignement droite (optionnel) */
+.top-menu .right {
+    margin-left: auto;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li a {
+    display: block;
+    padding: 8px;
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+ul li a:hover {
+    background-color: #ecf0f1;
+}
