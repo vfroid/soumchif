@@ -53,12 +53,23 @@ def show(request, pk):
             'total': total_systeme
         })
 
-    context = {
-        'projet': projet,
-        'systemes_data': systemes_data,
-        'total_projet': total_projet,
-        'articles_groupes': articles_groupes.values(),  # 👈 important
-    }
+        # Calorifugeage
+        # Récupérer tous les Calorifu liés aux systèmes du projet
+        calorifus = Calorifu.objects.filter(systeme__projet=projet).select_related('systeme', 'article',
+                                                                                   'article__equipement')
+        # Organiser par système
+        recap = {}
+        for c in calorifus:
+            if c.systeme not in recap:
+                recap[c.systeme] = []
+            recap[c.systeme].append(c)
+        context = {
+            'projet': projet,
+            'systemes_data': systemes_data,
+            'total_projet': total_projet,
+            'articles_groupes': articles_groupes.values(),  # 👈 important
+            'recap': recap,
+        }
 
     return render(request, 'projet/show.html', context)
 # Ajouter un projet

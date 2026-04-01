@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h1>Projet : {{ projet.mandant }} débuté le  {{ projet.debut }}</h1>
-<h2>Récapitulatif global des articles</h2>
+<h2>Récapitulatif global des systemes</h2>
 {% for item in systemes_data %}
   <h3>Système : {{ item.systeme.nom }} ( {{ item.systeme.code }}  {{ item.systeme.local}})</h3>
 
@@ -82,4 +83,49 @@
           </tr>
         </table>
 
-{% endblock content %}
+
+ <h3>Récapitulatif Calorifugeage</h3>
+
+{% if recap %}
+  {% for systeme, calorifus in recap.items %}
+    <h4>Système : {{ systeme.nom }} ({{ systeme.abreviation }})</h4>
+    <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Article</th>
+          <th>Tuyau (m)</th>
+          <th>CDS</th>
+          <th>EMB</th>
+          <th>ROB</th>
+          <th>Isol CDS</th>
+          <th>Isol EMB</th>
+          <th>Isol ROB</th>
+          <th>Antifeu CDS</th>
+          <th>Antifeu EMB</th>
+          <th>Antifeu ROB</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in calorifus %}
+          <tr>
+            <td>{{ c.article.equipement.nom }}</td>
+            <td>{{ c.tuy }}</td>
+            <td>{{ c.tuy_cds }}</td>
+            <td>{{ c.tuy_emb }}</td>
+            <td>{{ c.tuy_rob }}</td>
+            <td>{{ c.isol_cds }}</td>
+            <td>{{ c.isol_emb }}</td>
+            <td>{{ c.isol_rob }}</td>
+            <td>{{ c.antifeu_cds }}</td>
+            <td>{{ c.antifeu_emb }}</td>
+            <td>{{ c.antifeu_rob }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</table>
+  {% endfor %}
+{% else %}
+  <p>Aucun calorifugeage enregistré pour ce projet.</p>
+{% endif %}
+  {% endblock %}
