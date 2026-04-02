@@ -1,51 +1,36 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Projet
 from .forms import ProjetForm
-from article.models import Article
+from batiment.models import Batiment
 from calorifu.models import Calorifu
 from django.db.models.functions import Coalesce
 from django.db.models import Sum, F, Value, DecimalField, IntegerField, Q, FloatField
+from collections import defaultdict
+from decimal import Decimal
 
 # Liste des projets
-def list(request):
+def projet_list(request):
     projets=Projet.objects.all()
     return render(request,'projet/list.html',{'projets':projets})
 
+def to_decimal(val):
+    """Convertit float/int/None en Decimal en toute sécurité"""
+    return Decimal(str(val or 0))
 
-from collections import defaultdict
 
-def show(request, pk):
+def articles_par_systeme(request, pk):
     projet = get_object_or_404(Projet, pk=pk)
+    systemes = projet.systemes.prefetch_related('systeme_articles__equipement')
 
     systemes_data = []
-    total_projet = 0
 
-    # 🔹 Pour le tableau global
-    articles_groupes = defaultdict(lambda: {
-        'nom': '',
-        'unite': '',
-        'prix': 0,
-        'qte_totale': 0,
-        'montant_total': 0
-    })
-
-    for systeme in projet.systemes.all():
-        articles = systeme.articles_systeme
-        total_systeme = 0
-
-        for article in articles:
-            montant = article.montant
+    for systeme in systemes:
+        articles = []
+        total_systeme = Decimal('0')
+        for article in systeme.systeme_articles.all():
+            montant = (article.qte or Decimal('0')) * (article.equipement.prix or Decimal('0'))
             total_systeme += montant
-            total_projet += montant
-
-            eq = article.equipement
-
-            # 🔹 Regroupement
-            articles_groupes[eq.id]['nom'] = eq.nom
-            articles_groupes[eq.id]['unite'] = eq.unite
-            articles_groupes[eq.id]['prix'] = eq.prix
-            articles_groupes[eq.id]['qte_totale'] += article.qte
-            articles_groupes[eq.id]['montant_total'] += montant
+            articles.append({'article': article, 'montant': montant})
 
         systemes_data.append({
             'systeme': systeme,
@@ -53,25 +38,88 @@ def show(request, pk):
             'total': total_systeme
         })
 
-        # Calorifugeage
-        # Récupérer tous les Calorifu liés aux systèmes du projet
-        calorifus = Calorifu.objects.filter(systeme__projet=projet).select_related('systeme', 'article',
-                                                                                   'article__equipement')
-        # Organiser par système
-        recap = {}
-        for c in calorifus:
-            if c.systeme not in recap:
-                recap[c.systeme] = []
-            recap[c.systeme].append(c)
-        context = {
-            'projet': projet,
-            'systemes_data': systemes_data,
-            'total_projet': total_projet,
-            'articles_groupes': articles_groupes.values(),  # 👈 important
-            'recap': recap,
-        }
+    context = {
+        'projet': projet,
+        'systemes_data': systemes_data,
+    }
+    return render(request, 'projet/articles_par_systeme.html', context)
 
-    return render(request, 'projet/show.html', context)
+
+def articles_global(request, pk):
+    projet = get_object_or_404(Projet, pk=pk)
+    articles_groupes = defaultdict(lambda: {
+        'nom': '',
+        'unite': '',
+        'prix': Decimal('0'),
+        'qte_totale': Decimal('0'),
+        'montant_total': Decimal('0'),
+    })
+    total_projet = Decimal('0')
+
+    for systeme in projet.systemes.prefetch_related('systeme_articles__equipement'):
+        for article in systeme.systeme_articles.all():
+            montant = (article.qte or Decimal('0')) * (article.equipement.prix or Decimal('0'))
+            total_projet += montant
+            eq = article.equipement
+            data = articles_groupes[eq.id]
+            data['nom'] = eq.nom
+            data['unite'] = eq.unite
+            data['prix'] = eq.prix or Decimal('0')
+            data['qte_totale'] += article.qte or Decimal('0')
+            data['montant_total'] += montant
+
+    context = {
+        'projet': projet,
+        'articles_groupes': articles_groupes.values(),
+        'total_projet': total_projet,
+    }
+    return render(request, 'projet/articles_global.html', context)
+
+def calorifugeage_par_systeme(request, pk):
+    projet = get_object_or_404(Projet, pk=pk)
+    systemes = projet.systemes.prefetch_related('systeme_calorifus')
+    context = {
+        'projet': projet,
+        'systemes': systemes,
+    }
+    return render(request, 'projet/calorifugeage_par_systeme.html', context)
+
+
+def calorifugeage_global(request, pk):
+    projet = get_object_or_404(Projet, pk=pk)
+    calorifus = Calorifu.objects.filter(systeme__projet=projet)
+
+    totaux = defaultdict(lambda: Decimal('0'))
+    for c in calorifus:
+        totaux['tuy'] += c.tuy or Decimal('0')
+        totaux['tuy_cds'] += c.tuy_cds or Decimal('0')
+        totaux['tuy_emb'] += c.tuy_emb or Decimal('0')
+        totaux['tuy_rob'] += c.tuy_rob or Decimal('0')
+        totaux['isol_cds'] += c.isol_cds or Decimal('0')
+        totaux['isol_emb'] += c.isol_emb or Decimal('0')
+        totaux['isol_rob'] += c.isol_rob or Decimal('0')
+        totaux['antifeu_cds'] += c.antifeu_cds or Decimal('0')
+        totaux['antifeu_emb'] += c.antifeu_emb or Decimal('0')
+        totaux['antifeu_rob'] += c.antifeu_rob or Decimal('0')
+
+    context = {
+        'projet': projet,
+        'totaux': totaux,
+    }
+    return render(request, 'projet/calorifugeage_global.html', context)
+
+def projet_batiments(request, pk):
+    projet = get_object_or_404(Projet, pk=pk)
+    batiments=projet.batiments_batiment.filter(pk=pk)
+    return render(request,'projet/batiments.html',{'batiments':batiments,  'projet': projet})
+
+
+#***********************************************************  CRUD **********************************************************/
+
+def show(request, pk):
+    projet = get_object_or_404(Projet, pk=pk)
+    return render(request, 'projet/show.html', {'projet': projet})
+
 # Ajouter un projet
 def new(request):
     if request.method == 'POST':
@@ -102,3 +150,8 @@ def delete(request, pk):
         projet.delete()
         return redirect('projet_list')
     return render(request, 'projet/delete.html', {'projet': projet})
+
+# Liste des projets
+def projet_list(request):
+    projets=Projet.objects.all()
+    return render(request,'projet/list.html',{'projets':projets})

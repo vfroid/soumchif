@@ -1,131 +1,20 @@
 {% extends 'base.html' %}
 
+{% block sidebar %}
+    <h3>Menu Projet</h3>
+    <p><a href="{% url 'home' %}">Accueil</a></p>
+    <p><a href="{% url 'projet_list' %}">Liste des projets</a></p>
+    <p><a href="{% url 'projet_articles_par_systeme' projet.pk %}">Articles par Systeme</a></p>
+    <p><a href="{% url 'articles_global' projet.pk %}">Articles cumulés</a></p>
+    <p><a href="{% url 'calorifugeage_par_systeme' projet.pk %}">Calorifugeage par systeme</a></p>
+    <p><a href="{% url 'calorifugeage_global' projet.pk %}">Calorifugeage cumulés</a></p>
+    <p><a href="{% url 'projet_batiments' projet.pk %}">Bâtiments</a></p>
+{% endblock sidebar %}
+
+
+
 {% block content %}
+<h1>Projet: {{ projet.description }}</h1>
+<h3>Mandataire: {{ projet.mandant }}</h3>
 
-<h1>Projet : {{ projet.mandant }} débuté le  {{ projet.debut }}</h1>
-<h2>Récapitulatif global des systemes</h2>
-{% for item in systemes_data %}
-  <h3>Système : {{ item.systeme.nom }} ( {{ item.systeme.code }}  {{ item.systeme.local}})</h3>
-
-  <table class="table-systeme">
-    <thead>
-      <tr>
-        <th class="col-nom">Article</th>
-        <th class="col-qte">Quantité</th>
-        <th class="col-unite">Unité</th>
-        <th class="col-prix">Prix unitaire</th>
-        <th class="col-total">Montant</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for article in item.articles %}
-      <tr>
-        <td class="col-nom">{{ article.equipement.nom }}</td>
-        <td class="col-qte">{{ article.qte }}</td>
-        <td class="col-unite">{{ article.equipement.unite }}</td>
-        <td class="col-prix">{{ article.equipement.prix|floatformat:2 }}</td>
-        <td class="col-total">{{ article.montant|floatformat:2 }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-
-    <tfoot>
-      <tr>
-        <td colspan="4" class="total-ligne">Total système :</td>
-        <td class="col-total">{{ item.total|floatformat:2 }}</td>
-      </tr>
-    </tfoot>
-      <table class="table-systeme">
-          <tr>
-            <td class="col-nom"></td>
-            <td class="col-qte"></td>
-            <td class="col-unite"></td>
-            <td class="total-ligne">TOTAL PROJET :</td>
-            <td class="col-total"><strong>{{ total_projet|floatformat:2 }}</strong></td>
-          </tr>
-        </table>
-  </table>
-{% endfor %}
-
-<hr>
-
-<h2>Récapitulatif global des articles</h2>
-
-<table border="1" cellpadding="5" cellspacing="0">
-  <thead>
-    <tr>
-      <th>Article</th>
-      <th>Quantité totale</th>
-      <th>Unité</th>
-      <th>Prix unitaire</th>
-      <th>Montant total</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for article in articles_groupes %}
-    <tr>
-      <td>{{ article.nom }}</td>
-      <td>{{ article.qte_totale }}</td>
-      <td>{{ article.unite }}</td>
-      <td>{{ article.prix|floatformat:2 }}</td>
-      <td class="total-ligne"><strong>{{ article.montant_total|floatformat:2 }}</strong></td>
-    </tr>
-    {% endfor %}
-  </tbody>
-    <table class="table-systeme">
-          <tr>
-            <td class="col-nom"></td>
-            <td class="col-qte"></td>
-            <td class="col-unite"></td>
-            <td class="total-ligne">TOTAL PROJET :</td>
-            <td class="col-total"><strong>{{ total_projet|floatformat:2 }}</strong></td>
-          </tr>
-        </table>
-
-
- <h3>Récapitulatif Calorifugeage</h3>
-
-{% if recap %}
-  {% for systeme, calorifus in recap.items %}
-    <h4>Système : {{ systeme.nom }} ({{ systeme.abreviation }})</h4>
-    <table border="1" cellpadding="5" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Article</th>
-          <th>Tuyau (m)</th>
-          <th>CDS</th>
-          <th>EMB</th>
-          <th>ROB</th>
-          <th>Isol CDS</th>
-          <th>Isol EMB</th>
-          <th>Isol ROB</th>
-          <th>Antifeu CDS</th>
-          <th>Antifeu EMB</th>
-          <th>Antifeu ROB</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for c in calorifus %}
-          <tr>
-            <td>{{ c.article.equipement.nom }}</td>
-            <td>{{ c.tuy }}</td>
-            <td>{{ c.tuy_cds }}</td>
-            <td>{{ c.tuy_emb }}</td>
-            <td>{{ c.tuy_rob }}</td>
-            <td>{{ c.isol_cds }}</td>
-            <td>{{ c.isol_emb }}</td>
-            <td>{{ c.isol_rob }}</td>
-            <td>{{ c.antifeu_cds }}</td>
-            <td>{{ c.antifeu_emb }}</td>
-            <td>{{ c.antifeu_rob }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-</table>
-  {% endfor %}
-{% else %}
-  <p>Aucun calorifugeage enregistré pour ce projet.</p>
-{% endif %}
-  {% endblock %}
+{% endblock %}

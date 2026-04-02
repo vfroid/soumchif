@@ -1,0 +1,37 @@
+{% extends 'projet/show.html' %}
+
+{% block content %}
+<h1>Articles par système - Projet {{ projet.mandant }}</h1>
+
+{% for item in systemes_data %}
+<h2>Système : {{ item.systeme.nom }}</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Article</th>
+            <th>Quantité</th>
+            <th>Unité</th>
+            <th>Prix unitaire</th>
+            <th>Montant</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in item.articles %}
+        <tr>
+            <td>{{ entry.article.equipement.nom }}</td>
+            <td>{{ entry.article.qte }}</td>
+            <td>{{ entry.article.equipement.unite }}</td>
+            <td>{{ entry.article.equipement.prix|floatformat:2 }}</td>
+            <td>{{ entry.montant|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">Total système :</td>
+            <td>{{ item.total|floatformat:2 }}</td>
+        </tr>
+    </tfoot>
+</table>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'projet/show.html' %}
+
+{% block content %}
+<h2>Calorifugeage par système</h2>
+
+{% for systeme in systemes %}
+    <h3>Système : {{ systeme.nom }}</h3>
+
+    {% if systeme.systeme_calorifus.all %}
+        <table border="1">
+            <tr>
+                <th>Article</th>
+                <th>Tuyau (m)</th>
+                <th>CDS</th>
+                <th>EMB</th>
+                <th>ROB</th>
+            </tr>
+
+            {% for c in systeme.systeme_calorifus.all %}
+            <tr>
+                <td>{{ c.article }}</td>
+                <td>{{ c.tuy }}</td>
+                <td>{{ c.tuy_cds }}</td>
+                <td>{{ c.tuy_emb }}</td>
+                <td>{{ c.tuy_rob }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucune donnée</p>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

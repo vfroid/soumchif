@@ -1,0 +1,39 @@
+{% extends 'projet/show.html' %}
+
+{% block content %}
+{% for b in batiments %}
+    <h3>{{ b.nom }}</h3>
+    <div id="jstree">
+
+            <ul>
+                {% for etage in b.etages.all %}
+                <li>
+                    {% if etage.designation %}
+                        {{ etage.designation }}
+                    {% else %}
+                        Étage {{ etage.numero }}
+                    {% endif %}
+                    <ul>
+                        {% for local in etage.locals.all %}
+                            <li>{{ local.code }} - {{ local.designation }}</li>
+                        {% empty %}
+                            <li>Aucun local</li>  <!-- Optionnel : Affiche un message si aucun local -->
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<script>
+    $(document).ready(function() {
+        $('#jstree').jstree();
+    });
+</script>
+{% endfor %}
+{% endblock content %}

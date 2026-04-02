@@ -1,0 +1,34 @@
+{% extends 'projet/show.html' %}
+
+
+{% block content %}
+<h1>Récapitulatif global des articles - Projet {{ projet.mandant }}</h1>
+<table border="1">
+<thead>
+<tr>
+    <th>Article</th>
+    <th>Quantité totale</th>
+    <th>Unité</th>
+    <th>Prix unitaire</th>
+    <th>Montant total</th>
+</tr>
+</thead>
+<tbody>
+{% for article in articles_groupes %}
+<tr>
+    <td>{{ article.nom }}</td>
+    <td>{{ article.qte_totale }}</td>
+    <td>{{ article.unite }}</td>
+    <td>{{ article.prix|floatformat:2 }}</td>
+    <td>{{ article.montant_total|floatformat:2 }}</td>
+</tr>
+{% endfor %}
+</tbody>
+<tfoot>
+<tr>
+    <td colspan="4">Total projet :</td>
+    <td>{{ total_projet|floatformat:2 }}</td>
+</tr>
+</tfoot>
+</table>
+{% endblock %}

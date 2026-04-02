@@ -1,0 +1,18 @@
+{% extends 'projet/show.html' %}
+
+{% block content %}
+<h1>Récapitulatif global du calorifugeage - Projet {{ projet.mandant }}</h1>
+<table border="1">
+<tr><th>Type</th><th>Total</th></tr>
+<tr><td>Tuyau total</td><td>{{ totaux.tuy }}</td></tr>
+<tr><td>Tuy CDS</td><td>{{ totaux.tuy_cds }}</td></tr>
+<tr><td>Tuy EMB</td><td>{{ totaux.tuy_emb }}</td></tr>
+<tr><td>Tuy ROB</td><td>{{ totaux.tuy_rob }}</td></tr>
+<tr><td>Isol CDS</td><td>{{ totaux.isol_cds }}</td></tr>
+<tr><td>Isol EMB</td><td>{{ totaux.isol_emb }}</td></tr>
+<tr><td>Isol ROB</td><td>{{ totaux.isol_rob }}</td></tr>
+<tr><td>Antifeu CDS</td><td>{{ totaux.antifeu_cds }}</td></tr>
+<tr><td>Antifeu EMB</td><td>{{ totaux.antifeu_emb }}</td></tr>
+<tr><td>Antifeu ROB</td><td>{{ totaux.antifeu_rob }}</td></tr>
+</table>
+{% endblock %}
